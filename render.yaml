@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: quickdrop-signaling
+    runtime: node
+    buildCommand: npm ci --omit=dev --workspace server
+    startCommand: npm start --workspace server
+    healthCheckPath: /health
+    numInstances: 1
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: SESSION_TTL_MS
+        value: 300000
+      - key: ACTIVE_SESSION_TTL_MS
+        value: 7200000
