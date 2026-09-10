@@ -2,6 +2,8 @@
 
 **Choose a file. Scan a code. Send it directly between browsers.**
 
+**[Open QuickDrop](https://quickdrop-rishi.onrender.com/)** — hosted on Render Free. The first visit after inactivity may take about a minute to wake up.
+
 QuickDrop is a QR-based peer-to-peer file transfer app with encrypted WebRTC transport, receiver consent, live progress, and direct-to-disk saving for large files. No account or cloud file upload is required.
 
 ![QuickDrop interface](docs/quickdrop-preview.png)
@@ -63,6 +65,8 @@ The simplest setup hosts the frontend and WebSocket signaling together on one Re
 1. Sign in to [Render](https://dashboard.render.com/) and create a Blueprint from this repository, or create a Web Service with the settings below.
 2. Deploy the `main` branch and wait for the service to become live.
 3. Open its assigned HTTPS URL on the sender, choose a file, and scan the QR code on the receiver.
+
+If you deploy using Render's **Public Git Repository** option, use **Manual Deploy → Deploy latest commit** after pushing updates. Automatic deployment requires a supported connected-repository or Blueprint setup.
 
 | Setting                                        | Value                                           |
 | ---------------------------------------------- | ----------------------------------------------- |
