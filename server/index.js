@@ -1,7 +1,9 @@
 import http from 'node:http';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { WebSocket, WebSocketServer } from 'ws';
+import sirv from 'sirv';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const DEFAULT_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:5173'];
@@ -98,12 +100,25 @@ export function createSignalingServer(options = {}) {
   const configuredOrigins =
     options.allowedOrigins ?? process.env.ALLOWED_ORIGINS?.split(',') ?? DEFAULT_ORIGINS;
   const allowedOrigins = new Set(configuredOrigins.map((origin) => origin.trim()).filter(Boolean));
+  const publicOrigin = options.publicOrigin ?? process.env.RENDER_EXTERNAL_URL;
+  if (publicOrigin) allowedOrigins.add(new URL(publicOrigin).origin);
   if (allowedOrigins.size === 0 || allowedOrigins.has('*')) {
     throw new Error('ALLOWED_ORIGINS must contain exact frontend origins, not a wildcard.');
   }
 
   const rooms = new Map();
   let closing = false;
+  const staticDir =
+    options.staticDir ??
+    (process.env.SERVE_CLIENT === 'true'
+      ? fileURLToPath(new URL('../client/dist/', import.meta.url))
+      : null);
+  if (staticDir && !existsSync(path.join(staticDir, 'index.html'))) {
+    throw new Error('Frontend build is missing. Run npm run build before starting the full app.');
+  }
+  const serveClient = staticDir
+    ? sirv(staticDir, { single: true, etag: true, ignores: [/^\/assets\//] })
+    : null;
   const server = http.createServer((request, response) => {
     response.setHeader('Cache-Control', 'no-store');
     response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -116,8 +131,29 @@ export function createSignalingServer(options = {}) {
       );
       return;
     }
-    response.writeHead(404, { 'Content-Type': 'application/json' });
-    response.end(JSON.stringify({ error: 'Not found' }));
+    const notFound = () => {
+      response.writeHead(404, { 'Content-Type': 'application/json' });
+      response.end(JSON.stringify({ error: 'Not found' }));
+    };
+    if (serveClient && ['GET', 'HEAD'].includes(request.method)) {
+      let pathname;
+      try {
+        pathname = new URL(request.url, 'http://localhost').pathname;
+      } catch {
+        notFound();
+        return;
+      }
+      if (
+        pathname === '/' ||
+        pathname === '/favicon.svg' ||
+        pathname.startsWith('/assets/') ||
+        pathname.startsWith('/receive/')
+      ) {
+        serveClient(request, response, notFound);
+        return;
+      }
+    }
+    notFound();
   });
   server.requestTimeout = 10_000;
   server.headersTimeout = 10_000;

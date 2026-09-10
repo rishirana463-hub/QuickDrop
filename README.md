@@ -16,13 +16,13 @@ File contents and metadata travel through the WebRTC data channel. The separate 
 | Transfer    | Ordered chunks, live speed and ETA, cancellation, and final receipt                     |
 | Large files | Direct-to-disk streaming with a bounded write queue                                     |
 | Interface   | Responsive layout, dark/light themes, and local transfer history                        |
-| Validation  | 43 unit/integration tests and 17 browser tests, including an opt-in real 2 GiB transfer |
+| Validation  | 45 unit/integration tests and 17 browser tests, including an opt-in real 2 GiB transfer |
 
 The configured file limit is **100 GiB**; the largest end-to-end transfer verified here is **2 GiB + 37 bytes**, with every saved byte checked. Receiving above **512 MiB** requires a browser with direct-to-disk support. See [Multi-GB transfers](#multi-gb-transfers) for the limits.
 
 Built with Vite, React, Tailwind CSS, Framer Motion, `qrcode.react`, `simple-peer`, `uuid`, Node.js, and `ws`.
 
-[Quick start](#run-locally) · [Features](#included) · [Deployment](#deployment-vercel--render) · [Privacy](#connectivity-and-privacy-boundaries) · [Tests](#validation) · [Troubleshooting](#troubleshooting)
+[Quick start](#run-locally) · [Features](#included) · [Deployment](#deployment-render-free) · [Privacy](#connectivity-and-privacy-boundaries) · [Tests](#validation) · [Troubleshooting](#troubleshooting)
 
 ## Run locally
 
@@ -56,13 +56,39 @@ To keep using the sender at localhost while scanning on a phone, also set `VITE_
 - Dark/light modes, mouse tilt, glass panels, animated progress and success, reduced-motion support, responsive layouts.
 - Local history of the last 20 completed transfers, with a clear-history control. Only metadata is kept in browser storage.
 
-## Deployment: Vercel + Render
+## Deployment: Render Free
+
+The simplest setup hosts the frontend and WebSocket signaling together on one Render Web Service. The included `render.yaml` explicitly selects the free instance plan. No database or file storage service is needed.
+
+1. Sign in to [Render](https://dashboard.render.com/) and create a Blueprint from this repository, or create a Web Service with the settings below.
+2. Deploy the `main` branch and wait for the service to become live.
+3. Open its assigned HTTPS URL on the sender, choose a file, and scan the QR code on the receiver.
+
+| Setting                                        | Value                                           |
+| ---------------------------------------------- | ----------------------------------------------- |
+| Repository                                     | `https://github.com/rishirana463-hub/QuickDrop` |
+| Runtime                                        | Node                                            |
+| Root directory                                 | Repository root (leave blank)                   |
+| Build command                                  | `npm ci --include=dev && npm run build`         |
+| Start command                                  | `npm start --workspace server`                  |
+| Instance type                                  | **Free**                                        |
+| Region                                         | Singapore                                       |
+| Health check                                   | `/health`                                       |
+| `NODE_VERSION`                                 | `22`                                            |
+| `SERVE_CLIENT`                                 | `true`                                          |
+| `VITE_PUBLIC_APP_URL` and `VITE_SIGNALING_URL` | Leave unset or empty                            |
+
+Render provides `PORT` and `RENDER_EXTERNAL_URL`. QuickDrop automatically allows the exact Render origin for signaling; QR links and WebSockets use the current website's origin. For a custom domain, add its exact HTTPS origin to `ALLOWED_ORIGINS`. Built assets are served only from `client/dist`; local environment files are excluded from Git.
+
+Free web services sleep after 15 minutes without inbound HTTP or WebSocket traffic, so the first visit after inactivity can take about a minute to load. There is a shared allowance of 750 free instance hours per workspace each month. See [Render's current free-plan limits](https://render.com/docs/free). Once deployed, your computer and the development tunnel are no longer needed to keep the site available.
+
+## Alternative: Vercel frontend + Render signaling
 
 The repository contains deployment configuration; no remote services or accounts are provisioned by running it locally.
 
 ### 1. Signaling on Render
 
-Create a Web Service from this repository, or import the included `render.yaml` Blueprint. Use the repository root as the service root:
+For this split setup, create a Web Service manually with the settings below and leave `SERVE_CLIENT` unset or `false`. The included Blueprint instead deploys the combined setup above. Use the repository root as the service root:
 
 | Setting           | Value                                                                     |
 | ----------------- | ------------------------------------------------------------------------- |

@@ -1,16 +1,22 @@
 services:
   - type: web
-    name: quickdrop-signaling
+    name: quickdrop
     runtime: node
-    buildCommand: npm ci --omit=dev --workspace server
+    plan: free
+    region: singapore
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start --workspace server
     healthCheckPath: /health
     numInstances: 1
     envVars:
       - key: NODE_VERSION
         value: '22'
-      - key: ALLOWED_ORIGINS
-        sync: false
+      - key: SERVE_CLIENT
+        value: 'true'
+      - key: VITE_PUBLIC_APP_URL
+        value: ''
+      - key: VITE_SIGNALING_URL
+        value: ''
       - key: SESSION_TTL_MS
         value: 300000
       - key: ACTIVE_SESSION_TTL_MS
