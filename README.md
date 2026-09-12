@@ -55,7 +55,7 @@ To keep using the sender at localhost while scanning on a phone, also set `VITE_
 - Receiver verifies the final byte count and acknowledges receipt before sender success.
 - Direct-to-disk saving on supported browsers. The receiver chooses the destination before file bytes are sent, and success is reported only after the file stream closes successfully. Files up to 512 MiB also support the automatic Blob download flow, a visible download link, and native device-save options when available.
 - Cancellation, invalid/expired sessions, connection failure and inactivity handling.
-- Dark/light modes, mouse tilt, glass panels, animated progress and success, reduced-motion support, responsive layouts.
+- A bold yellow-and-ink interface with original draggable file artwork, magnetic buttons, and scroll-reactive typography adapted from React Bits. Includes light/dark themes, a motion pause control, reduced-motion support, and responsive sender/receiver layouts.
 - Local history of the last 20 completed transfers, with a clear-history control. Only metadata is kept in browser storage.
 
 ## Deployment: Render Free
@@ -66,7 +66,7 @@ The simplest setup hosts the frontend and WebSocket signaling together on one Re
 2. Deploy the `main` branch and wait for the service to become live.
 3. Open its assigned HTTPS URL on the sender, choose a file, and scan the QR code on the receiver.
 
-If you deploy using Render's **Public Git Repository** option, use **Manual Deploy → Deploy latest commit** after pushing updates. Automatic deployment requires a supported connected-repository or Blueprint setup.
+The current QuickDrop service automatically deploys updates to `main`. For another deployment, check its Auto-Deploy setting; if disabled, use **Manual Deploy → Deploy latest commit** after pushing updates.
 
 | Setting                                        | Value                                           |
 | ---------------------------------------------- | ----------------------------------------------- |
@@ -183,6 +183,8 @@ Unit/integration tests exercise signaling, expiry, origin/schema limits, cleanup
 | Link expired or transfer interrupted | Select the file again and create a new invitation. Transfers do not resume.                                                                                                                |
 
 ## Structure
+
+Animation sources and license notices are documented in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ```text
 client/

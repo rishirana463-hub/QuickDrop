@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
+import { useReducedMotion } from 'framer-motion';
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -7,10 +8,11 @@ import {
   Clock3,
   History,
   Moon,
+  Pause,
+  Play,
   ShieldCheck,
   Sun,
   X,
-  Zap,
 } from 'lucide-react';
 import Sender from './pages/Sender.jsx';
 import Receiver from './pages/Receiver.jsx';
@@ -44,13 +46,16 @@ function AppDialog({ open, onClose, title, children }) {
 }
 
 export default function App() {
+  const reducedMotion = useReducedMotion();
+  const [paused, setPaused] = useState(false);
+  const motionEnabled = !paused && !reducedMotion;
   const [dialog, setDialog] = useState(null);
   const [history, setHistory] = useState(readHistory);
   const [light, setLight] = useState(() => {
     try {
-      return localStorage.getItem('quickdrop-theme') === 'light';
+      return localStorage.getItem('quickdrop-theme') !== 'dark';
     } catch {
-      return false;
+      return true;
     }
   });
   useEffect(() => {
@@ -71,14 +76,11 @@ export default function App() {
     };
   }, []);
   return (
-    <div className="app-shell">
-      <div className="ambient ambient-one" />
-      <div className="ambient ambient-two" />
-      <div className="background-grid" />
+    <div className="app-shell" data-motion={motionEnabled ? 'on' : 'off'}>
       <header className="site-header">
         <Link className="brand" to="/" aria-label="QuickDrop home">
           <span className="brand-mark">
-            <Zap size={21} fill="currentColor" strokeWidth={1.7} />
+            <ArrowUpRight size={29} strokeWidth={3} />
           </span>
           QuickDrop<span className="brand-period">.</span>
         </Link>
@@ -87,6 +89,14 @@ export default function App() {
             How it works <ArrowUpRight size={14} />
           </button>
           <span className="nav-divider" />
+          <button
+            className="icon-button motion-toggle"
+            aria-label={paused ? 'Play animations' : 'Pause animations'}
+            title={paused ? 'Play animations' : 'Pause animations'}
+            onClick={() => setPaused(!paused)}
+          >
+            {paused ? <Play size={16} /> : <Pause size={16} />}
+          </button>
           <button
             className="icon-button"
             aria-label="Transfer history"
@@ -106,7 +116,7 @@ export default function App() {
       </header>
       <main>
         <Routes>
-          <Route path="/" element={<Sender />} />
+          <Route path="/" element={<Sender motionEnabled={motionEnabled} />} />
           <Route path="/receive/:sessionId" element={<Receiver />} />
           <Route path="/receive" element={<Receiver />} />
           <Route
@@ -125,10 +135,10 @@ export default function App() {
       </main>
       <footer className="site-footer">
         <span>
-          <span className="footer-dot" /> A little less friction. A lot more flow.
+          <span className="footer-dot" /> QUICKDROP — PASS THE GOOD STUFF.
         </span>
         <span>
-          Built for the space between devices <Zap size={12} />
+          MADE TO MOVE. © 2026 <ArrowUpRight size={16} />
         </span>
       </footer>
       <AppDialog

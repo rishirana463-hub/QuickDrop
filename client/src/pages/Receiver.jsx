@@ -150,10 +150,10 @@ export default function Receiver() {
           <span /> A DIRECT CONNECTION
         </div>
         <h1>
-          Something good
-          <br className="mobile-break" /> is <span>on its way.</span>
+          SPECIAL
+          <br /> <span>DELIVERY.</span>
         </h1>
-        <p>One small step. Then it’s on your device.</p>
+        <p>Check the file. Give it the go-ahead. Make it yours.</p>
       </section>
       {validateUUID(sessionId || '') ? (
         <IncomingTransfer key={sessionId} sessionId={sessionId} />

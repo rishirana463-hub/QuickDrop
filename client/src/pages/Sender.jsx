@@ -5,12 +5,10 @@ import {
   ArrowDownLeft,
   ArrowRight,
   ArrowUpRight,
-  Check,
   Link2,
   LockKeyhole,
   ScanLine,
   ShieldCheck,
-  Zap,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import FileDropZone from '../components/FileDropZone.jsx';
@@ -19,6 +17,7 @@ import ProgressBar from '../components/ProgressBar.jsx';
 import TransferStatus from '../components/TransferStatus.jsx';
 import { usePeerConnection } from '../hooks/usePeerConnection.js';
 import { addHistory } from '../lib/format.js';
+import DispatchHero from '../components/DispatchHero.jsx';
 
 function ReceiveEntry() {
   const [link, setLink] = useState('');
@@ -81,7 +80,7 @@ function ReceiveEntry() {
   );
 }
 
-export default function Sender() {
+export default function Sender({ motionEnabled = true }) {
   const [mode, setMode] = useState('send');
   const [selection, setSelection] = useState(null);
   const transfer = usePeerConnection({
@@ -112,29 +111,22 @@ export default function Sender() {
   }
   return (
     <>
-      <section className="intro">
-        <div className="eyebrow">
-          <span /> LESS WAITING. MORE SHARING.
+      <DispatchHero motionEnabled={motionEnabled} />
+      <div className="transfer-heading" id="transfer">
+        <div>
+          <span className="editorial-label">01 / THE HANDOFF</span>
+          <h2>
+            YOUR FILE.
+            <br />
+            <em>OUT THERE.</em>
+          </h2>
         </div>
-        <h1>
-          Good things are
-          <br className="mobile-break" /> meant to be <span>shared.</span>
-        </h1>
-        <p>From your device to theirs. Just a file, a scan, and a connection.</p>
-        <div className="intro-tags">
-          <span>
-            <LockKeyhole size={13} /> Private by design
-          </span>
-          <i />
-          <span>
-            <Zap size={13} /> Straight to your device
-          </span>
-          <i />
-          <span>
-            <Check size={13} /> No sign-up
-          </span>
-        </div>
-      </section>
+        <p>
+          Drop it here. Connect another device.
+          <br />
+          Give your file somewhere to go.
+        </p>
+      </div>
       <motion.section
         className="workspace"
         initial={{ opacity: 0, y: 16 }}
@@ -188,6 +180,7 @@ export default function Sender() {
                     <span className="local-badge">STAYS LOCAL</span>
                   </div>
                   <FileDropZone
+                    motionEnabled={motionEnabled}
                     file={selection?.file}
                     onSelect={select}
                     onRemove={reset}
@@ -250,24 +243,24 @@ export default function Sender() {
         <div>
           <span className="how-number">01</span>
           <div>
-            <h3>Pick something good.</h3>
-            <p>A photo, a project, that very important PDF.</p>
+            <h3>Pick it.</h3>
+            <p>A photo, a project, a very important PDF. One file at a time.</p>
           </div>
         </div>
         <span className="step-connector" />
         <div>
           <span className="how-number">02</span>
           <div>
-            <h3>Make the connection.</h3>
-            <p>Scan the QR code on the other device.</p>
+            <h3>Link up.</h3>
+            <p>Scan the code or open the link on your other device.</p>
           </div>
         </div>
         <span className="step-connector" />
         <div>
           <span className="how-number">03</span>
           <div>
-            <h3>And it’s theirs.</h3>
-            <p>Accept the file. We’ll take it from here.</p>
+            <h3>Let it fly.</h3>
+            <p>Accept the file. Keep both tabs open until it lands.</p>
           </div>
         </div>
       </section>

@@ -1,9 +1,16 @@
 import { useRef, useState } from 'react';
 import { ArrowUpRight, FileUp, FolderUp, Plus, X } from 'lucide-react';
 import TiltCard from './TiltCard.jsx';
+import Magnet from './react-bits/Magnet.jsx';
 import { formatBytes, MAX_FILE_SIZE } from '../lib/format.js';
 
-export default function FileDropZone({ file, onSelect, onRemove, locked = false }) {
+export default function FileDropZone({
+  file,
+  onSelect,
+  onRemove,
+  locked = false,
+  motionEnabled = true,
+}) {
   const input = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState('');
@@ -70,9 +77,11 @@ export default function FileDropZone({ file, onSelect, onRemove, locked = false 
             </div>
             <h3>Drop your file here</h3>
             <p>or choose something to share</p>
-            <button className="button primary" onClick={() => input.current?.click()}>
-              Browse files <ArrowUpRight size={17} />
-            </button>
+            <Magnet padding={20} magnetStrength={8} disabled={!motionEnabled}>
+              <button className="button primary" onClick={() => input.current?.click()}>
+                Browse files <ArrowUpRight size={17} />
+              </button>
+            </Magnet>
             <span className="file-limit">
               Any file type <span>·</span> Up to 100 GB*
             </span>
