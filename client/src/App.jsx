@@ -53,9 +53,9 @@ export default function App() {
   const [history, setHistory] = useState(readHistory);
   const [light, setLight] = useState(() => {
     try {
-      return localStorage.getItem('quickdrop-theme') !== 'dark';
+      return localStorage.getItem('quickdrop-theme') === 'light';
     } catch {
-      return true;
+      return false;
     }
   });
   useEffect(() => {
@@ -135,10 +135,10 @@ export default function App() {
       </main>
       <footer className="site-footer">
         <span>
-          <span className="footer-dot" /> QUICKDROP — PASS THE GOOD STUFF.
+          <span className="footer-dot" /> QuickDrop. A little closer.
         </span>
         <span>
-          MADE TO MOVE. © 2026 <ArrowUpRight size={16} />
+          Thoughtfully simple. © 2026 <ArrowUpRight size={16} />
         </span>
       </footer>
       <AppDialog

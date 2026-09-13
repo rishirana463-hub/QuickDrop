@@ -22,7 +22,7 @@ File contents and metadata travel through the WebRTC data channel. The separate 
 
 The configured file limit is **100 GiB**; the largest end-to-end transfer verified here is **2 GiB + 37 bytes**, with every saved byte checked. Receiving above **512 MiB** requires a browser with direct-to-disk support. See [Multi-GB transfers](#multi-gb-transfers) for the limits.
 
-Built with Vite, React, Tailwind CSS, Framer Motion, `qrcode.react`, `simple-peer`, `uuid`, Node.js, and `ws`.
+Built with Vite, React, Tailwind CSS, Three.js, Framer Motion, `qrcode.react`, `simple-peer`, `uuid`, Node.js, and `ws`.
 
 [Quick start](#run-locally) · [Features](#included) · [Deployment](#deployment-render-free) · [Privacy](#connectivity-and-privacy-boundaries) · [Tests](#validation) · [Troubleshooting](#troubleshooting)
 
@@ -55,7 +55,7 @@ To keep using the sender at localhost while scanning on a phone, also set `VITE_
 - Receiver verifies the final byte count and acknowledges receipt before sender success.
 - Direct-to-disk saving on supported browsers. The receiver chooses the destination before file bytes are sent, and success is reported only after the file stream closes successfully. Files up to 512 MiB also support the automatic Blob download flow, a visible download link, and native device-save options when available.
 - Cancellation, invalid/expired sessions, connection failure and inactivity handling.
-- A bold yellow-and-ink interface with original draggable file artwork, magnetic buttons, and scroll-reactive typography adapted from React Bits. Includes light/dark themes, a motion pause control, reduced-motion support, and responsive sender/receiver layouts.
+- A graphite-and-pearl interface with subtle frosted glass, an original interactive Three.js sculpture, and magnetic buttons adapted from React Bits. The 3D scene loads separately, caps rendering at 30 fps, pauses offscreen, and falls back to CSS artwork when WebGL is unavailable. Includes light/dark themes, a motion pause control, reduced-motion support, and responsive sender/receiver layouts.
 - Local history of the last 20 completed transfers, with a clear-history control. Only metadata is kept in browser storage.
 
 ## Deployment: Render Free

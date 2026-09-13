@@ -114,17 +114,16 @@ export default function Sender({ motionEnabled = true }) {
       <DispatchHero motionEnabled={motionEnabled} />
       <div className="transfer-heading" id="transfer">
         <div>
-          <span className="editorial-label">01 / THE HANDOFF</span>
+          <span className="editorial-label">THE EXCHANGE</span>
           <h2>
-            YOUR FILE.
+            Good things,
             <br />
-            <em>OUT THERE.</em>
+            <em>ready to go.</em>
           </h2>
         </div>
         <p>
-          Drop it here. Connect another device.
-          <br />
-          Give your file somewhere to go.
+          A file from you. A moment to connect. <br />
+          Let’s take it from here.
         </p>
       </div>
       <motion.section
@@ -243,7 +242,7 @@ export default function Sender({ motionEnabled = true }) {
         <div>
           <span className="how-number">01</span>
           <div>
-            <h3>Pick it.</h3>
+            <h3>Choose your file.</h3>
             <p>A photo, a project, a very important PDF. One file at a time.</p>
           </div>
         </div>
@@ -251,7 +250,7 @@ export default function Sender({ motionEnabled = true }) {
         <div>
           <span className="how-number">02</span>
           <div>
-            <h3>Link up.</h3>
+            <h3>Make the connection.</h3>
             <p>Scan the code or open the link on your other device.</p>
           </div>
         </div>
@@ -259,7 +258,7 @@ export default function Sender({ motionEnabled = true }) {
         <div>
           <span className="how-number">03</span>
           <div>
-            <h3>Let it fly.</h3>
+            <h3>Let it arrive.</h3>
             <p>Accept the file. Keep both tabs open until it lands.</p>
           </div>
         </div>
